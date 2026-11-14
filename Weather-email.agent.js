@@ -23,8 +23,7 @@ const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
 });
-// Aborting signal
-const signal = AbortSignal.timeout(10_000) // 10 seconds -> I didn't know that nodejs allows '_' as commas in numeric values and that has no effect on execution => SO this 10_000 means 10,000 milliseconds or 20 seconds , just read it through the nodejs docs.
+
 
 const gemini = new OpenAI({
     baseURL: process.env.GEMINI_BASE_URL,
@@ -60,10 +59,12 @@ const main = async () => {
     let isChatting = true;
     while (isChatting) {
         try {
+            // Aborting signal
+            const signal = AbortSignal.timeout(10_000) // 10 seconds -> I didn't know that nodejs allows '_' as commas in numeric values and that has no effect on execution => SO this 10_000 means 10,000 milliseconds or 20 seconds , just read it through the nodejs docs.
             console.log("start your chat")
             const querry = await rl.question("> ", { signal }) // here we can pass that signal and is there is no input within 10s the question will be aborted
-            console.log("Querry : ",querry);
-            
+            console.log("Querry : ", querry);
+
             if (querry === "exit") {
                 isChatting = false
                 continue
