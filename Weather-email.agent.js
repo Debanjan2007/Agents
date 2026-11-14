@@ -51,8 +51,8 @@ const runner = async (q) => {
         const result = await run(agent, thread)
         thread = result.history
         console.log("Finaloutput : ", result.finalOutput);
-    }catch(err){
-        console.log(err);   
+    } catch (err) {
+        console.log(err.error[0].error.message);
     }
 }
 
@@ -60,13 +60,15 @@ const main = async () => {
     let isChatting = true;
     while (isChatting) {
         try {
-            process.stdout("start your chat")
+            console.log("start your chat")
             const querry = await rl.question("> ", { signal }) // here we can pass that signal and is there is no input within 10s the question will be aborted
-            if(querry === "exit"){
+            console.log("Querry : ",querry);
+            
+            if (querry === "exit") {
                 isChatting = false
                 continue
             }
-            runner(querry)
+            await runner(querry)
         } catch (err) {
             if (err.name === "AbortError" || err.name === 'TimeoutError') {
                 console.log("Session tiemdout!........");
